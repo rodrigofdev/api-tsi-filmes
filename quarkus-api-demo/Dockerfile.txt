@@ -1,4 +1,4 @@
-# Etapa de build
+# Etapa de build usando Java 21
 FROM eclipse-temurin:21-jdk as build
 
 WORKDIR /app
@@ -7,11 +7,14 @@ COPY . .
 
 RUN ./mvnw clean install -DskipTests
 
-# Etapa de runtime (se quiser imagem final mais leve)
+# Etapa de execução
 FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
 
-COPY --from=build /app/target/quarkus-app/ .
+COPY --from=build /app/target/quarkus-app/lib/ /app/lib/
+COPY --from=build /app/target/quarkus-app/*.jar /app/
+COPY --from=build /app/target/quarkus-app/app/ /app/app/
+COPY --from=build /app/target/quarkus-app/quarkus/ /app/quarkus/
 
-CMD ["java", "-jar", "quarkus-run.jar"]
+CMD ["java", "-jar", "/app/quarkus-run.jar"]
