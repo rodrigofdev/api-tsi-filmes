@@ -18,3 +18,5 @@ COPY --from=build /app/target/quarkus-app/app/ /app/app/
 COPY --from=build /app/target/quarkus-app/quarkus/ /app/quarkus/
 
 CMD ["java", "-jar", "/app/quarkus-run.jar"]
+
+RUN java -version
