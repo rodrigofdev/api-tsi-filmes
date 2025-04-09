@@ -1,4 +1,4 @@
-# Use imagem com Java 21
+# Etapa de build
 FROM eclipse-temurin:21-jdk as build
 
 WORKDIR /app
@@ -7,8 +7,7 @@ COPY . .
 
 RUN ./mvnw clean install -DskipTests
 
-# ----------------------------------------
-# Agora a imagem de execução:
+# Etapa de runtime (se quiser imagem final mais leve)
 FROM eclipse-temurin:21-jdk
 
 WORKDIR /app
