@@ -1,9 +1,18 @@
-FROM eclipse-temurin:21-jdk
+# Use imagem com Java 21
+FROM eclipse-temurin:21-jdk as build
 
 WORKDIR /app
 
 COPY . .
 
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw clean install -DskipTests
 
-CMD ["java", "-jar", "target/quarkus-app/quarkus-run.jar"]
+# ----------------------------------------
+# Agora a imagem de execução:
+FROM eclipse-temurin:21-jdk
+
+WORKDIR /app
+
+COPY --from=build /app/target/quarkus-app/ .
+
+CMD ["java", "-jar", "quarkus-run.jar"]
